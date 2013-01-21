@@ -1,0 +1,9 @@
+- `Gem:` mechanize
+    -  ssl 验证失败的问题，因为有些根证书只有cer格式，没有cet格式，干脆关掉这个验证得了
+    - 如何保存文件
+    {{{ruby
+    agent = Mechanize.new {|a|a.verify_mode = OpenSSL::SSL::VERIFY_NONE}
+    file = agent.get 'http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif'
+    #if this is a file then can be saved
+    file.save 'tmp.gif'
+    }}}

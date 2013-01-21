@@ -1,0 +1,473 @@
+* `login sequence`
+    # 取回一个rand码`POST /otsweb/loginAction.do?method=loginAysnSuggest HTTP/1.1`
+{{{class='brush:plain'
+POST /otsweb/loginAction.do?method=loginAysnSuggest HTTP/1.1
+Host: dynamic.12306.cn
+Connection: keep-alive
+Content-Length: 0
+Accept: application/json, text/javascript, */*
+Origin: https://dynamic.12306.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: zh-CN,zh;q=0.8
+Accept-Charset: UTF-8,*;q=0.5
+Cookie: as the send back...
+    }}}
+    {{{class='brush:js'
+{"loginRand":"142","randError":"Y"}
+    }}} 
+    # 用上一步的rand码和图片验证码，真正地`post /otsweb/loginAction.do?method=login`
+    {{{class='brush:plain'
+POST /otsweb/loginAction.do?method=login HTTP/1.1
+Host: dynamic.12306.cn
+Connection: keep-alive
+Content-Length: 175
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Origin: https://dynamic.12306.cn
+User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Content-Type: application/x-www-form-urlencoded
+Referer: https://dynamic.12306.cn/otsweb/loginAction.do?method=init
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: zh-CN,zh;q=0.8
+Accept-Charset: UTF-8,*;q=0.5
+Cookie: ...
+    }}}
+    `form data`如下
+    {{{class='brush:plain'
+loginRand:142
+refundLogin:N
+refundFlag:Y
+loginUser.user_name:doun@163.com
+nameErrorFocus:
+user.password:144168
+passwordErrorFocus:
+randCode:TV4G
+randErrorFocus:
+autoLogin:on
+    }}}
+- 查票定票
+    # `发送日期和时间，车等信息` get
+    {{{class='brush:plain'
+GET /otsweb/order/querySingleAction.do?method=queryLeftTicket&orderRequest.train_date=2013-01-23&orderRequest.from_station_telecode=SZQ&orderRequest.to_station_telecode=ENQ&orderRequest.train_no=&trainPassType=QB&trainClass=QB%23D%23Z%23T%23K%23QT%23&includeStudent=00&seatTypeAndNum=&orderRequest.start_time_str=00%3A00--24%3A00 HTTP/1.1
+Host: dynamic.12306.cn
+Connection: keep-alive
+Accept: text/plain, */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Content-Type: application/x-www-form-urlencoded
+Referer: http://dynamic.12306.cn/otsweb/order/querySingleAction.do?method=init
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: zh-CN,zh;q=0.8
+Accept-Charset: UTF-8,*;q=0.5
+Cookie: JSESSIONID=93C548E22F7D9E914C27A85982715127; helper.regUser=; helper.regSn=04dounaaabdCffggBiFabaahFaagbaaaEaahjaafbaafjaaedaacC; BIGipServerotsweb=2312372490.48160.0000
+    }}}
+    # `发送需预定的车次信息，来选人` post
+    {{{class='brush:plain'
+POST /otsweb/order/querySingleAction.do?method=submutOrderRequest HTTP/1.1
+Host: dynamic.12306.cn
+Connection: keep-alive
+Content-Length: 721
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Origin: http://dynamic.12306.cn
+User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Content-Type: application/x-www-form-urlencoded
+Referer: http://dynamic.12306.cn/otsweb/order/querySingleAction.do?method=init
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: zh-CN,zh;q=0.8
+Accept-Charset: UTF-8,*;q=0.5
+Cookie: JSESSIONID=93C548E22F7D9E914C27A85982715127; helper.regUser=; helper.regSn=04dounaaabdCffggBiFabaahFaagbaaaEaahjaafbaafjaaedaacC; BIGipServerotsweb=2312372490.48160.0000
+    }}}
+    {{{class='brush:js'
+    station_train_code:T8370
+    train_date:2013-01-23
+    seattype_num:
+    from_station_telecode:SZQ
+    to_station_telecode:ENQ
+    include_student:00
+    from_station_telecode_name:深圳
+    to_station_telecode_name:兴宁
+    round_train_date:2013-01-23
+    round_start_time_str:00:00--24:00
+    single_round_type:1
+    train_pass_type:QB
+    train_class_arr:QB#D#Z#T#K#QT#
+    start_time_str:00:00--24:00
+    lishi:04:05
+    train_start_time:15:18
+    trainno4:65000T837005
+    arrive_time:19:23
+    from_station_name:深圳
+    to_station_name:兴宁
+    from_station_no:01
+    to_station_no:05
+    ypInfoDetail:1*****33004*****00001*****00523*****0000
+    mmStr:462C0ECA0A69F8773B7C8EBC005C5DE34385884A1E790BA42B2B0993
+    locationCode:Q7
+    }}}
+    # `去预定页面，里面保存了需要的数据`
+    {{{class='brush:plain'
+    GET /otsweb/order/confirmPassengerAction.do?method=init HTTP/1.1
+    Host: dynamic.12306.cn
+    Connection: keep-alive
+    Cache-Control: max-age=0
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+    User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+    Referer: http://dynamic.12306.cn/otsweb/order/querySingleAction.do?method=init
+    Accept-Encoding: gzip,deflate,sdch
+    Accept-Language: zh-CN,zh;q=0.8
+    Accept-Charset: UTF-8,*;q=0.5
+    Cookie: JSESSIONID=93C548E22F7D9E914C27A85982715127; helper.regUser=; helper.regSn=04dounaaabdCffggBiFabaahFaagbaaaEaahjaafbaafjaaedaacC; BIGipServerotsweb=2312372490.48160.0000
+    }}}
+        `保存的数据如下：`
+    {{{class='brush:xml'
+    <input type="hidden" name="orderRequest.train_date" value="2013-01-23" id="start_date">
+    <input type="hidden" name="orderRequest.train_no" value="65000T837005" id="train_no">
+    <input type="hidden" name="orderRequest.station_train_code" value="T8370" id="station_train_code">
+    <input type="hidden" name="orderRequest.from_station_telecode" value="SZQ" id="from_station_telecode">
+    <input type="hidden" name="orderRequest.to_station_telecode" value="ENQ" id="to_station_telecode">
+    <input type="hidden" name="orderRequest.seat_type_code" value="" id="seat_type_code">
+
+    <input type="hidden" name="orderRequest.ticket_type_order_num" value="" id="ticket_type_order_num">
+    <input type="hidden" name="orderRequest.bed_level_order_num" value="000000000000000000000000000000" id="bed_level_order_num">
+
+    <input type="hidden" name="orderRequest.start_time" value="15:18" id="orderRequest_start_time">
+
+    <input type="hidden" name="orderRequest.end_time" value="19:23" id="orderRequest_end_time">
+    <input type="hidden" name="orderRequest.from_station_name" value="深圳" id="orderRequest_from_station_name">
+    <input type="hidden" name="orderRequest.to_station_name" value="兴宁" id="orderRequest_to_station_name">
+    <input type="hidden" name="orderRequest.cancel_flag" value="1" id="cancel_flag">
+    <input type="hidden" name="orderRequest.id_mode" value="Y" id="orderRequest_id_mode">
+    <input type="hidden" value="" id="_type" />
+    <input type="hidden" value="2013-01-23" id="_train_date_str" />
+    <input type="hidden" value="T8370"
+        id="_station_train_code" />
+    }}}
+    # `发送XMLHttpRequest,找到常用联系人`
+    {{{class='brush:plain'
+    POST /otsweb/order/confirmPassengerAction.do?method=getpassengerJson HTTP/1.1
+    Host: dynamic.12306.cn
+    Connection: keep-alive
+    Content-Length: 0
+    Accept: application/json, text/javascript, */*
+    Origin: http://dynamic.12306.cn
+    X-Requested-With: XMLHttpRequest
+    User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+    Content-Type: application/x-www-form-urlencoded
+    Referer: http://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init
+    Accept-Encoding: gzip,deflate,sdch
+    Accept-Language: zh-CN,zh;q=0.8
+    Accept-Charset: UTF-8,*;q=0.5
+    Cookie: JSESSIONID=93C548E22F7D9E914C27A85982715127; helper.regUser=; helper.regSn=04dounaaabdCffggBiFabaahFaagbaaaEaahjaafbaafjaaedaacC; BIGipServerotsweb=2312372490.48160.0000
+    }}}
+        `返回如下数据`
+        {{{class='brush:js'
+        {"passengerJson":[{"first_letter":"ZHUBIWEI","isUserSelf":"","mobile_no":"15999687033","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"510922198301026794","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"朱必胜","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"GZY","isUserSelf":"","mobile_no":"15999531351","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"440204196701045021","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"古足英","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZXL","isUserSelf":"","mobile_no":"15999531351","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"440221196706261942","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"曾细莲","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZBW","isUserSelf":"","mobile_no":"15201848033","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"51092219880311679X","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"朱必伟","passenger_type":"3","passenger_type_name":"","recordCount":"11"},{"first_letter":"YWL","isUserSelf":"","mobile_no":"13712226364","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"441900198804015012","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"杨威龙","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZXM","isUserSelf":"","mobile_no":"15999531351","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"440221196901151626","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"詹小明","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZH-","isUserSelf":"","mobile_no":"13712226364","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"440204199106073646","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"詹慧娴","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZPP","isUserSelf":"","mobile_no":"15999531351","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"440221198603051626","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"詹萍萍","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZX","isUserSelf":"","mobile_no":"13670798667","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"441481199509095297","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"钟旋","passenger_type":"1","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZQY","isUserSelf":"","mobile_no":"18320269202","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"441481199309142925","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"钟秋月","passenger_type":"3","passenger_type_name":"","recordCount":"11"},{"first_letter":"ZHX","isUserSelf":"","mobile_no":"13670798667","old_passenger_id_no":"","old_passenger_id_type_code":"","old_passenger_name":"","passenger_flag":"0","passenger_id_no":"441425197004165325","passenger_id_type_code":"1","passenger_id_type_name":"","passenger_name":"钟辉香","passenger_type":"1","passenger_type_name":"","recordCount":"11"}]}
+        }}}
+    # `选人后填表单，输入验证码，再次post`
+{{{class='brush:plain'
+POST /otsweb/order/confirmPassengerAction.do?method=checkOrderInfo&rand=WVTT HTTP/1.1
+Host: dynamic.12306.cn
+Connection: keep-alive
+Content-Length: 1258
+Accept: application/json, text/javascript, */*
+Origin: http://dynamic.12306.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Content-Type: application/x-www-form-urlencoded
+Referer: http://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: zh-CN,zh;q=0.8
+Accept-Charset: UTF-8,*;q=0.5
+Cookie: JSESSIONID=93C548E22F7D9E914C27A85982715127; helper.regUser=; helper.regSn=04dounaaabdCffggBiFabaahFaagbaaaEaahjaafbaafjaaedaacC; BIGipServerotsweb=2312372490.48160.0000
+}}}
+{{{class='brush:js'
+{"checkHuimd":"Y","check608":"Y","msg":"","errMsg":"Y"}
+}}}
+    `原来这是用来干这个的`
+        # `你丫的，还要再确认？！`
+    {{{class='brush:plain'
+    GET /otsweb/order/confirmPassengerAction.do?method=getQueueCount&train_date=2013-01-23&train_no=65000T837005&station=T8370&seat=1&from=SZQ&to=ENQ&ticket=1006753300401765000010067500523012050000 HTTP/1.1
+    Host: dynamic.12306.cn
+    Connection: keep-alive
+    Accept: application/json, text/javascript, */*
+    X-Requested-With: XMLHttpRequest
+    User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+    Content-Type: application/x-www-form-urlencoded
+    Referer: http://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init
+    Accept-Encoding: gzip,deflate,sdch
+    Accept-Language: zh-CN,zh;q=0.8
+    Accept-Charset: UTF-8,*;q=0.5
+    Cookie: JSESSIONID=93C548E22F7D9E914C27A85982715127; helper.regUser=; helper.regSn=04dounaaabdCffggBiFabaahFaagbaaaEaahjaafbaafjaaedaacC; BIGipServerotsweb=2312372490.48160.0000
+    }}}
+    {{{class='brush:js'
+    {"countT":0,"count":34,"ticket":"1*****33004*****00001*****00523*****0000","op_1":true,"op_2":false}
+    }}}
+    # `有病，还要再确认?然后居然说没定到，网络错误？。。`
+    {{{class='brush:plain'
+    POST /otsweb/order/confirmPassengerAction.do?method=confirmSingleForQueue HTTP/1.1
+    Host: dynamic.12306.cn
+    Connection: keep-alive
+    Content-Length: 1249
+    Accept: application/json, text/javascript, */*
+    Origin: http://dynamic.12306.cn
+    X-Requested-With: XMLHttpRequest
+    User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+    Content-Type: application/x-www-form-urlencoded
+    Referer: http://dynamic.12306.cn/otsweb/order/confirmPassengerAction.do?method=init
+    Accept-Encoding: gzip,deflate,sdch
+    Accept-Language: zh-CN,zh;q=0.8
+    Accept-Charset: UTF-8,*;q=0.5
+    Cookie: JSESSIONID=93C548E22F7D9E914C27A85982715127; helper.regUser=; helper.regSn=04dounaaabdCffggBiFabaahFaagbaaaEaahjaafbaafjaaedaacC; BIGipServerotsweb=2312372490.48160.0000
+    }}}
+    {{{class='brush:plain'
+    org.apache.struts.taglib.html.TOKEN:cd35670214ac394efadc0c073f67e188
+    leftTicketStr:1006753300401765000010067500523012050000
+    textfield:中文或拼音首字母
+    checkbox9:9
+    orderRequest.train_date:2013-01-23
+    orderRequest.train_no:65000T837005
+    orderRequest.station_train_code:T8370
+    orderRequest.from_station_telecode:SZQ
+    orderRequest.to_station_telecode:ENQ
+    orderRequest.seat_type_code:
+    orderRequest.ticket_type_order_num:
+    orderRequest.bed_level_order_num:000000000000000000000000000000
+    orderRequest.start_time:15:18
+    orderRequest.end_time:19:23
+    orderRequest.from_station_name:深圳
+    orderRequest.to_station_name:兴宁
+    orderRequest.cancel_flag:1
+    orderRequest.id_mode:Y
+    passengerTickets:1,0,1,钟秋月,1,441481199309142925,18320269202,Y
+    oldPassengers:钟秋月,1,441481199309142925
+    passenger_1_seat:1
+    passenger_1_ticket:1
+    passenger_1_name:钟秋月
+    passenger_1_cardtype:1
+    passenger_1_cardno:441481199309142925
+    passenger_1_mobileno:18320269202
+    checkbox9:Y
+    oldPassengers:
+    checkbox9:Y
+    oldPassengers:
+    checkbox9:Y
+    oldPassengers:
+    checkbox9:Y
+    oldPassengers:
+    checkbox9:Y
+    randCode:WVTT
+    orderRequest.reserve_flag:A
+    }}}
+{{{class='brush:js'
+function(data) {
+    if ('Y' != data.errMsg) {
+    alert(data.errMsg);
+$("#rand").val("");
+$("#img_rrand_code").click();
+$(":button").attr("disabled",false);
+$(":button").removeClass("long_button_x");
+return;
+}elseif('N'==data.checkHuimd){
+//alert("对不起，由于您取消次数过多，今日将不能继续受理您的订票请求！");
+alert(data.msg);
+$(":button").attr("disabled",false);
+$(":button").removeClass("long_button_x");
+return;
+}elseif('N'==data.check608){
+//alert("本车为实名制列车，实行一日一车一证一票制！");
+alert(data.msg);
+$(":button").attr("disabled",false);
+$(":button").removeClass("long_button_x");
+return;
+}
+else{
+showOrderDialog(tFlag);
+}
+}
+
+    }}}
+    {{{class='brush:js'
+function showOrderDialog(tFlag) {
+	// 加入排队等待人数过多时的提示文案
+	var queue_note = "";
+	if (isAsync == '1' && $("#left_ticket").val() != "") {
+		$
+				.ajax({
+					url : 'confirmPassengerAction.do?method=getQueueCount',
+					type : "GET",
+					data : {
+						train_date : $("#start_date").val(),
+						train_no : $("#train_no").val(),
+						station : $("#station_train_code").val(),
+						seat : $("#passenger_1_seat").val(),
+						from : $("#from_station_telecode").val(),
+						to : $("#to_station_telecode").val(),
+						ticket : $("#left_ticket").val()
+					},
+					dataType : "json",
+					success : function(data) {
+						//queue_note = "尊敬的旅客，"+((data.theWaitTotalCount == undefined || data.theWaitTotalCount == null || data.theWaitTotalCount == "null") ? "" : "系统当前待处理的订单总数<font color='red'>" + data.theWaitTotalCount + "</font>，" )+"本次列车您选择的席别尚有余票"
+						queue_note = "尊敬的旅客，本次列车您选择的席别尚有余票"
+								+ getTicketCountDesc(data.ticket,
+										$("#passenger_1_seat").val()) + "，";
+
+						if (data.op_2) {
+							queue_note += "目前排队人数已经超过余票张数，请您选择其他席别或车次，特此提醒。";
+							// queue_note = "今日已有<font color=\"red\">" +
+							// data.count +
+							// "</font>人先于您提交相同的购票需求，目前排队人数已超过剩余票数，请您选择其他席别或车次。";
+
+						} else {
+							$(parent.document.body)
+							.contents()
+							.find(":button")
+							.each(
+									function(a) {
+										if ($(this).html() == buttonNo) {
+											$(this).attr("disabled",
+													false).removeClass(
+													"long_button_x");
+										}
+									});
+							if (data.countT > 0) {
+								queue_note += "目前排队人数<font color=\"red\">"
+										+ data.countT + "</font>人，";
+							}
+							queue_note += "特此提醒。";
+						}
+						queue_note += "<br/><br/><font color=\"red\">请确认订单信息是否正确，如正确请点击“确定”，系统将为您随机分配席位。</font>";
+						/*
+						 * else if(data.op_1){ queue_note +=
+						 * "目前排队人数已经超过余票张数，特此提醒。"; //queue_note = "今日已有<font
+						 * color=\"red\">" + data.count + "</font>人先于您提交相同的购票需求，到处理您的需求时可能已无票，建议你们根据当前余票确定是否排队。"; }
+						 */
+						var note_elem = parent.document
+								.getElementById("queue_note");
+						if (note_elem != null) {
+							note_elem.innerHTML = queue_note;
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						return false;
+					}
+				});
+	}
+    
+	tourFlag = tFlag;
+	cardflag = false;// 是否使用护照
+	var ticket_info = getTicketInfo();
+	var passenger_info = getPassengerInfo();
+	// 弹出窗口提示信息
+	// 方式1
+	// var msgtext = "<br/><p><b>您所要提交的订单信息如下，请确定是否正确（<font
+	// color=\"red\">点击“确定”提交订单，点击“取消”返回修改</font>）：</b></p>";
+	// msgtext += "<br/><p><b>一、车次信息：</b></p>";
+	// msgtext += "<ul><li>"+ticket_info+"</li></ul>";
+	// msgtext += "<p><b>二、乘车人身份信息：</b></p>";
+	// msgtext += "<ul><li>"+passenger_info+"</li></ul>";
+	// msgtext += "<p><b>注：系统将根据售出情况随机为您申请席位，暂不支持自选席位。</b></p>";
+	// 方式2
+	var titile = "提交订单确认";
+	var msgtext = "<div class=\"submit-tips\">";
+	msgtext += "<div class=\"submit-cont\">";
+	msgtext += "<br/><div class=\"title\">车次信息</div>";
+	msgtext += ticket_info;
+
+	msgtext += "<div class=\"title\">乘车人信息</div>";
+	msgtext += passenger_info;
+	// if((to_station_code_=="LSO" || to_station_code_=="DAO" ||
+	// to_station_code_=="ADO" || to_station_code_=="NQO"
+	// ||to_station_code_=="THO" ) && cardflag == true) {
+	// msgtext += "<p
+	// style=\"color:#3177BF;\">注：1.系统将根据售出情况随机为您申请席位，暂不支持自选席位。</p>";
+	// msgtext += "<p
+	// style=\"color:#3177BF;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.根据现行规定，外国人在购买进西藏火车票时，须出示西藏自治区外事办公室或旅游局、商务厅的批准函（电），或者出示中国内地司局级接待单位出具的、已征得自治区上述部门同意的证明信函。台湾同胞赴藏从事旅游、商务活动，须事先向西藏自治区旅游局或商务厅提出申请，购买进藏火车票时须出示有关批准函。</p>";
+	// } else {
+	// msgtext += "<p
+	// style=\"color:#3177BF;\">注：系统将根据售出情况随机为您申请席位，暂不支持自选席位。</p>";
+	// }
+	msgtext += "<div id=\"queue_note\" style=\"font-size:14px;padding:20px;\">"
+			+ queue_note + "</div>";
+	msgtext += "</div></div>";
+	parent.pop_confirm(titile, msgtext, failfunc, successfunc, buttonNo,
+			buttonOk, 692);
+	//提交订单之前，设置弹出窗口的"确认"按钮为disable，提交之后再根据请求结果设置成false
+	$(parent.document.body).contents().find(":button")	.each(function(a) {
+				if ($(this).html() == buttonNo) {
+					$(this).attr("disabled",
+							true).addClass(
+							"long_button_x");
+				}
+			});
+	submitfunction.apply(this);
+}
+
+var failfunc = function() {
+	// alert(isAsync);
+	if (isAsync == '1') {
+		$(":button").attr("disabled", false);
+		$(":button").removeClass("long_button_x");
+
+		queueOrder(tourFlag);
+	} else {
+		$(":button").attr("disabled", true);
+		$(":button").addClass("long_button_x");
+		submit_form("confirmPassenger");
+	}
+};
+
+function queueOrder(tourFlag) {
+	popQueueInfo();
+
+	var url;
+	if (tourFlag == 'dc') {
+		// 异步下单-单程
+		url = 'confirmPassengerAction.do?method=confirmSingleForQueue';
+	} else if (tourFlag == 'wc') {
+		// 异步下单-往程
+		url = 'confirmPassengerAction.do?method=confirmPassengerInfoGoForQueue';
+	} else if (tourFlag == 'fc') {
+		// 异步下单-返程
+		url = 'confirmPassengerAction.do?method=confirmPassengerInfoBackForQueue';
+	} else if (tourFlag == 'gc') {
+		// 异步下单-改签
+		url = 'confirmPassengerResignAction.do?method=confirmPassengerInfoResignForQueue';
+	} else {
+		dispMessage("下单失败！旅程形式为" + tourFlag);
+
+		return;
+	}
+
+	dispMessage("正在处理，请稍候。");
+	$("#confirmPassenger")
+			.ajaxSubmit(
+					{
+						url : url,
+						type : "POST",
+						dataType : "json",
+						success : function(data) {
+							if (data.errMsg != 'Y') {
+								dispMessage("出票失败，"
+										+ data.errMsg
+										+ " <a style='color:#2C72BA' onclick='closePopWin()'>点击修改</a>");
+								refreshImg();
+								return false;
+							} else {
+								timer = new OrderQueueWaitTime(tourFlag,
+										waitFunc, finishFun);
+								timer.start();
+							}
+						},
+						error : function(XMLHttpRequest, textStatus,
+								errorThrown) {
+							dispMessage("下单失败！网络忙，请稍后再试。");
+							return false;
+						}
+					});
+}
+    }}}
+

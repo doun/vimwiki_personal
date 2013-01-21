@@ -1,0 +1,4 @@
+=== [[12306 bookingseq]] ===
+=== [[save pics using ruby]] ===
+=== [[writing ruby to auto 12306]] ===
+
